@@ -1,0 +1,12 @@
+{{- $globalConfig := .Values.jobs.globalConfig -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "mtr-exporter.fullname" . }}
+  labels:
+    {{- include "mtr-exporter.labels" . | nindent 4 }}
+data:
+  jobs.txt: |-
+  {{- range $k, $v := .Values.jobs.config }}
+    {{ $k }} -- {{ $v.schedule | default $globalConfig.schedule }} -- {{ $v.flags | default $globalConfig.flags }} {{ $k }}
+  {{- end }}

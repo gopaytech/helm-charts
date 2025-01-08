@@ -1,0 +1,18 @@
+apiVersion: v2
+name: mtr-exporter
+version: "0.0.5"
+kubeVersion: ">= 1.29.0"
+description: A Helm chart for github.com/mgumz/mtr-exporter
+type: application
+keywords:
+  - mtr
+  - networking
+  - observability
+home: https://gopaytech.github.io/helm-charts
+sources:
+  - https://github.com/mgumz/mtr-exporter
+maintainers:
+  - name: clavinjune
+    email: juneardoc@gmail.com
+    url: https://clavinjune.dev
+appVersion: "0.4.0"

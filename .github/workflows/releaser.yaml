@@ -1,0 +1,48 @@
+# This is a basic workflow to help you get started with Actions
+
+name: releaser
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # to push chart release and create a release (helm/chart-releaser-action)
+      packages: write # needed for ghcr access
+      id-token: write # needed for keyless signing
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - uses: helm/chart-releaser-action@v1.6.0
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          CR_GENERATE_RELEASE_NOTES: true
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Push charts to GHCR
+        run: |
+          shopt -s nullglob
+          for pkg in .cr-release-packages/*; do
+            if [ -z "${pkg:-}" ]; then
+              break
+            fi
+            helm push "${pkg}" "oci://ghcr.io/${GITHUB_REPOSITORY_OWNER}/helm-charts"
+          done
