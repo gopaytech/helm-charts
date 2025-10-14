@@ -1,3 +1,4 @@
+{{- if .Values.jobs.enableDefaultConfigMap }}
 {{- $globalConfig := .Values.jobs.globalConfig -}}
 apiVersion: v1
 kind: ConfigMap
@@ -10,3 +11,4 @@ data:
   {{- range $k, $v := .Values.jobs.config }}
     {{ $k }} -- {{ $v.schedule | default $globalConfig.schedule }} -- {{ $v.flags | default $globalConfig.flags }} {{ $k }}
   {{- end }}
+{{- end }}
