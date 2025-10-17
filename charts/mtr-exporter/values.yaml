@@ -129,6 +129,11 @@ serviceMonitor:
 
 # https://github.com/mgumz/mtr-exporter?tab=readme-ov-file#jobs-file-syntax
 jobs:
+  # if enableDefaultConfigMap is false, it will ignore all values set in globalConfig and config
+  # if enableDefaultConfigMap is false, it will use jobs configured in configmapName
+  # configMapName is required if enableDefaultConfigMap sets as false
+  enableDefaultConfigMap: true
+  configMapName: ""
   globalConfig:
     schedule: "@every 60s"
     flags: "-j --tcp --port 443 -c 10"

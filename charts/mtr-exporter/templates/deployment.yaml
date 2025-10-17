@@ -62,8 +62,13 @@ spec:
             {{- end }}
       volumes:
         - name: jobsconfig
+          {{- if .Values.jobs.enableDefaultConfigMap }}
           configMap:
             name: {{ include "mtr-exporter.fullname" . }}
+          {{- else }}
+          configMap:
+            name: {{ .Values.jobs.configMapName | required "You must set .Values.jobs.configMapName when jobs.enableDefaultConfigMap=false" }}
+          {{- end }}
         {{- with .Values.volumes }}
           {{- toYaml . | nindent 8 }}
         {{- end }}

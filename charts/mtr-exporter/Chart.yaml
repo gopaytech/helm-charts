@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mtr-exporter
-version: "0.0.6"
+version: "0.0.7"
 # kubeVersion: ">= 1.29.0"
 description: A Helm chart for github.com/mgumz/mtr-exporter
 type: application
