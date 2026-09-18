@@ -43,3 +43,22 @@ Will be resulting in
 example.com -- @every 45s -- -I ven2 -n example.com
 foobar.io -- @every 60s -- --tcp --port 443 -c 10 foobar.io
 ```
+
+## Scheduling
+
+The chart can set a priority class, a pod disruption budget and topology spread constraints on the pods. All three are off by default.
+
+```yaml
+replicaCount: 2
+priorityClassName: system-cluster-critical
+podDisruptionBudget:
+  enabled: true
+  maxUnavailable: 1
+topologySpreadConstraints:
+  - maxSkew: 1
+    topologyKey: topology.kubernetes.io/zone
+    whenUnsatisfiable: ScheduleAnyway
+    labelSelector:
+      matchLabels:
+        app.kubernetes.io/name: mtr-exporter
+```
