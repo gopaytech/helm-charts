@@ -1,0 +1,18 @@
+{{- if .Values.podDisruptionBudget.enabled }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "mtr-exporter.fullname" . }}
+  labels:
+    {{- include "mtr-exporter.labels" . | nindent 4 }}
+spec:
+  {{- /* The API rejects a budget that sets both bounds, so minAvailable wins when it is set. */}}
+  {{- if .Values.podDisruptionBudget.minAvailable }}
+  minAvailable: {{ .Values.podDisruptionBudget.minAvailable }}
+  {{- else if hasKey .Values.podDisruptionBudget "maxUnavailable" }}
+  maxUnavailable: {{ .Values.podDisruptionBudget.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "mtr-exporter.selectorLabels" . | nindent 6 }}
+{{- end }}

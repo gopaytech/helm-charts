@@ -122,6 +122,26 @@ tolerations: []
 
 affinity: {}
 
+# This sets the priority class of the pods, an empty string keeps the cluster default.
+# For more information checkout: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/
+priorityClassName: ""
+
+# This creates a pod disruption budget for the deployment, set minAvailable or maxUnavailable, not both.
+# For more information checkout: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
+podDisruptionBudget:
+  enabled: false
+  maxUnavailable: 1
+
+# This spreads the pods across failure domains, for example zones.
+# For more information checkout: https://kubernetes.io/docs/concepts/scheduling-eviction/topology-spread-constraints/
+topologySpreadConstraints: []
+# - maxSkew: 1
+#   topologyKey: topology.kubernetes.io/zone
+#   whenUnsatisfiable: ScheduleAnyway
+#   labelSelector:
+#     matchLabels:
+#       app.kubernetes.io/name: mtr-exporter
+
 serviceMonitor:
   enabled: true
   labels: {}
